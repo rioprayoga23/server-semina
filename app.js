@@ -5,9 +5,14 @@ const logger = require("morgan");
 
 const app = express();
 
-//*router
+//router
 const categoriesRouter = require("./app/api/v1/categories/router");
+const imagesRouter = require("./app/api/v1/images/router");
 const v1 = "/api/v1/cms";
+
+//middlewares
+const notFoundMiddleware = require("./app/middlewares/not-found");
+const handleErrorMiddleware = require("./app/middlewares/handler-error");
 
 app.use(logger("dev"));
 app.use(express.json());
@@ -22,5 +27,10 @@ app.get("/", (req, res) => {
 });
 
 app.use(v1, categoriesRouter);
+app.use(v1, imagesRouter);
+
+// middlewares
+app.use(notFoundMiddleware);
+app.use(handleErrorMiddleware);
 
 module.exports = app;
